@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Users {
+  id               Int           @id @default(autoincrement())
+  username         String        @unique
+  email            String        @unique
+  userImage        String?
+  coverImage       String?
+  password         String
+  salt             String
+  role             String
+  interests        String[]
+  followers        UserFollow[]  @relation("UserFollow_followerId")
+  followedTo       UserFollow[]  @relation("UserFollow_followedId")
+  Post             Post[]        @relation("user_post")
+  Comment          Comment[]     @relation("User_post_comments")
+  PostLike         PostLike[]    @relation("user_post_likes")
+  CommentLike      CommentLike[] @relation("user_comment_likes")
+  sentMessages     Message[]     @relation("SentMessages")
+  receivedMessages Message[]     @relation("ReceivedMessages")
+}
+
+model UserFollow {
+  id         Int   @id @default(autoincrement())
+  user       Users @relation("UserFollow_followerId", fields: [followerId], references: [id])
+  followerId Int
+  follower   Users @relation("UserFollow_followedId", fields: [followedId], references: [id])
+  followedId Int
+
+  @@unique([followerId, followedId])
+}
+
+model Post {
+  id        Int        @id @default(autoincrement())
+  content   String
+  imageUrl  String?
+  videoUrl  String?
+  createdAt DateTime   @default(now())
+  author    Users      @relation("user_post", fields: [authorId], references: [id])
+  authorId  Int
+  comments  Comment[]  @relation("post_comments")
+  postLikes PostLike[] @relation("post_likes")
+  trailTags TrailTag[]
+}
+
+model TrailTag {
+  id        Int      @id @default(autoincrement())
+  tag       String   @unique
+  posts     Post[]
+  createdAt DateTime @default(now())
+}
+
+model Comment {
+  id              Int           @id @default(autoincrement())
+  content         String
+  createdAt       DateTime      @default(now())
+  author          Users         @relation("User_post_comments", fields: [authorId], references: [id])
+  authorId        Int
+  postId          Int
+  post            Post          @relation("post_comments", fields: [postId], references: [id])
+  parentComment   Comment?      @relation("CommentToComment", fields: [parentCommentId], references: [id])
+  parentCommentId Int?
+  childComments   Comment[]     @relation("CommentToComment")
+  commentLikes    CommentLike[] @relation("comment_likes")
+}
+
+model PostLike {
+  id      Int      @id @default(autoincrement())
+  post    Post     @relation("post_likes", fields: [postId], references: [id])
+  postId  Int
+  user    Users    @relation("user_post_likes", fields: [userId], references: [id])
+  userId  Int
+  likedAt DateTime @default(now()) // Track when the post like occurred
+}
+
+model CommentLike {
+  id        Int      @id @default(autoincrement())
+  comment   Comment  @relation("comment_likes", fields: [commentId], references: [id])
+  commentId Int
+  user      Users    @relation("user_comment_likes", fields: [userId], references: [id])
+  userId    Int
+  likedAt   DateTime @default(now()) // Track when the comment like occurred
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  content    String
+  timestamp  DateTime @default(now())
+  sender     Users    @relation("SentMessages", fields: [senderId], references: [id])
+  senderId   Int
+  receiver   Users    @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  receiverId Int
+}
