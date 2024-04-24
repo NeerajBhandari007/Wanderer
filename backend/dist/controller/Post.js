@@ -22,6 +22,13 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 const getPostsAll = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const posts = yield prisma.post.findMany({
@@ -66,12 +73,13 @@ const getPostsAll = () => __awaiter(void 0, void 0, void 0, function* () {
                 }
             }
         });
-        for (const post of posts) {
+        const shuffledPosts = shuffleArray(posts);
+        for (const post of shuffledPosts) {
             for (const comment of post.comments) {
                 comment.childComments = yield fetchChildComments(comment);
             }
         }
-        return posts;
+        return shuffledPosts;
     }
     catch (error) {
         console.log(error);

@@ -1,6 +1,13 @@
 import { PrismaClient } from '@prisma/client'
 import  { Request, Response } from "express";
 const prisma = new PrismaClient()
+function shuffleArray(array:any) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 const getPostsAll=async()=>{
     try{
         
@@ -46,13 +53,13 @@ const getPostsAll=async()=>{
                 }
             }
         });
-        
-        for (const post of posts) {
+        const shuffledPosts = shuffleArray(posts);
+        for (const post of shuffledPosts) {
             for (const comment of post.comments) {
                 comment.childComments = await fetchChildComments(comment);
             }
         }
-        return posts;
+        return shuffledPosts;
     }catch(error){
         console.log(error)
         throw new Error('Error fetching posts');
