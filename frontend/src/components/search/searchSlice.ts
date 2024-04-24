@@ -35,6 +35,7 @@ export const searchSlice = createSlice({
     reducers: {
       clearSearchItem(state) {
         state.searchUser=[]
+        state.searchPost=[]
       },
     },
     extraReducers: (builder) => {

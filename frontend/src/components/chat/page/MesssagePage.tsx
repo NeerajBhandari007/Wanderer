@@ -70,7 +70,8 @@ export default function MesssagePage(props:any) {
   return (
     <>
     <div className='flex flex-col h-full pb-[60px]'>
-    <div className='flex w-full h-[70px] bg-teal-200 justify-start items-center pl-12 md:pl-4 shadow-[0_3px_10px_rgb(0,0,0,0.2)]'>
+    <div className='flex w-full h-[70px] bg-teal-200 justify-start items-center pl-12 md:pl-4 shadow-[0_3px_10px_rgb(0,0,0,0.2)] z-20 bg-transparent'>
+          <div className='flex w-fit items-center'>
           <div className='h-[33px] w-[33px] rounded-full bg-teal-950 border-2 border-teal-950 mr-4'>
           {selectFriend.userImage!==null && <img src={selectFriend.userImage} className='object-cover h-full w-full rounded-full' alt='profile'/>}
           </div>
@@ -79,6 +80,7 @@ export default function MesssagePage(props:any) {
             <h4 className='text-gray-800 text-base cursor-pointer font-bold'>{selectFriend.username}</h4>
             </Link>
             {/* <p>{online}</p> */}
+          </div>
           </div>
           
         </div>

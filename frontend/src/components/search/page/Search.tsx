@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAppSelector,useAppDispatch } from '../../../mainStore/common'
 import { clearSearchItem, searchPostAsync, searchUserAsync, selectSearchPost, selectSearchUser } from '../searchSlice'
 import Posts from '../../feed/page/Posts'
 import Navbar from '../../navbar/Navbar'
+import { Link } from 'react-router-dom'
 
 export default function Search() {
   const [user, setUser] = useState(true) 
@@ -52,6 +53,11 @@ export default function Search() {
       setUser(false)
       setPost(true)
   }
+  useEffect(() => {
+    dispatch(clearSearchItem())
+  }, [])
+  
+  
   return (
     <>
       <Navbar/>
@@ -71,7 +77,10 @@ export default function Search() {
                     <div className='h-[38px] w-[38px] bg-teal-950 border-2 border-teal-950 rounded-full mr-4'>
                         {elem.userImage!=null &&<img src={elem.userImage} className='object-cover rounded-full h-full w-full' alt='profile'/>}
                     </div>
-                    <p className='text-base text-gray-800 font-semibold'>{elem.username}</p>
+                    <Link to={`/myProfile/${elem.id}`}>
+                      <p className='text-base text-gray-800 font-semibold'>{elem.username}</p>
+                    </Link>
+                    
                 </div>)
                 })
                 }

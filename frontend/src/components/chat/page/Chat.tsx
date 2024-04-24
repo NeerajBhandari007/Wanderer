@@ -21,6 +21,7 @@ export default function Chat() {
     dispatch(clearChat())
     dispatch(clearOldMessage())
     setShowOld(false)
+    setPhone(false)
     // console.log(elem)
   }
   
@@ -51,7 +52,7 @@ export default function Chat() {
           <div className='h-[33px] w-[33px] rounded-full bg-teal-950 border-2 border-teal-950 mr-4'>
           {elem.userImage!==null && <img src={elem.userImage} className='object-cover h-full w-full rounded-full' alt='profile'/>}
           </div>
-          <h4 className='text-gray-200 text-base font-semibold' >{elem.username}</h4>
+          <h4 className='text-gray-200 text-base font-semibold text-left' >{elem.username}</h4>
         </div>)
         })}
             </div>
@@ -59,10 +60,10 @@ export default function Chat() {
       </div> }
       
       <div className='flex w-full md:w-3/4 flex-col  h-full bg-gradient-to-t from-gray-50 to-teal-200 relative'>
-        {!phone &&<div className='flex absolute left-2 top-5 justify-between w-full  md:relative '>
-          <GiHamburgerMenu className='text-teal-950 font-extrabold text-3xl cursor-pointer md:hidden' onClick={()=>{setPhone(true)}}/>
-          <Link to="/">
-            <IoMdHome className='text-teal-950 font-extrabold text-3xl mr-2 cursor-pointer md:absolute right-2'/>
+        {!phone &&<div className='flex absolute top-5 justify-between w-full  md:relative '>
+          <GiHamburgerMenu className='text-teal-950 z-50 font-extrabold text-3xl cursor-pointer md:hidden pl-2' onClick={()=>{setPhone(true)}}/>
+          <Link to="/" className='z-50'>
+            <IoMdHome className='text-teal-950 font-extrabold text-3xl cursor-pointer md:absolute right-2'/>
           </Link>
         </div>}
         {selectFriend && selected===selectFriend.id ? <MesssagePage showOld={showOld} setShowOld={setShowOld}/>:(<div className='h-full w-full flex justify-center items-center'>
