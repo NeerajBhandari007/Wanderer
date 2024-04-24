@@ -291,7 +291,7 @@ exports.getPostLike = async (req: Request, res: Response) => {
             },
             include:{
                 user:{
-                    select:{username:true,id:true}
+                    select:{username:true,id:true,userImage:true}
                 }
             }
         });

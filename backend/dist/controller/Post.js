@@ -281,7 +281,7 @@ exports.getPostLike = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             },
             include: {
                 user: {
-                    select: { username: true, id: true }
+                    select: { username: true, id: true, userImage: true }
                 }
             }
         });

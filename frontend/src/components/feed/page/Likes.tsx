@@ -2,10 +2,12 @@ import React, { useEffect } from 'react'
 import { RxCross2 } from "react-icons/rx";
 import {useAppDispatch,useAppSelector } from '../../../mainStore/common'
 import { fetchPostLikeByIdAsync, handleLikeClose, selectPostLikeUser } from '../feedSlice';
+import { Link } from 'react-router-dom';
 
 export default function Likes(props:any) {
     const dispatch=useAppDispatch();
     const content=useAppSelector(selectPostLikeUser)
+    console.log(content)
     // console.log(props.content)
     function closeHandle(){
         dispatch(handleLikeClose(-1));
@@ -29,8 +31,13 @@ export default function Likes(props:any) {
               {content&&<div className='flex-grow overflow-y-scroll '>
                 {content.map((elem:any)=>{
                   return(<div className='border-teal-900 border-b px-4 py-3 flex items-center'>
-                  <div className='h-[25px] w-[25px] bg-black rounded-full mr-3'></div>
-                  <div className='text-sm font-semibold text-gray-900'>{elem.user.username}</div>
+                  <div className='h-[25px] w-[25px] bg-teal rounded-full mr-3'>
+                  {elem.user.userImage!==null && <img src={elem.user.userImage} className='object-cover w-full h-full rounded-full' alt='profile'/>}
+                  </div>
+                  <Link to={`/myProfile/${elem.user.id}`}>
+                    <div className='text-sm font-semibold text-gray-900'>{elem.user.username}</div>
+                  </Link>
+                  
                 </div>)
                 })}
                 

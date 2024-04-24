@@ -142,7 +142,7 @@ export default function MesssagePage(props:any) {
       
         <div className='flex w-full py-4 items-center justify-center absolute bottom-0 bg-teal-800'>
         <div className='h-[40px] w-[40px] rounded-full bg-teal-950 border-2 border-teal-950 mr-2'>
-          {selectFriend.userImage!==null && <img src={selectFriend.userImage} className='object-cover h-full w-full rounded-full' alt='profile'/>}
+          {user.userImage!==null && <img src={user.userImage} className='object-cover h-full w-full rounded-full' alt='profile'/>}
           </div>
             <textarea id="mess"className='rounded-2xl w-3/4 text-sm p-2 bg-teal-50 h-[38px]' placeholder='Write your message......'  cols={60}  ></textarea>
             <IoSend className='text-4xl ml-2 cursor-pointer' onClick={()=>{handleSend()}}/>
