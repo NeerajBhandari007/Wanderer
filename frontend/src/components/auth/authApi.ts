@@ -1,5 +1,6 @@
 export function createUser(userData:object){
-    return new Promise(async(resolve)=>{
+    return new Promise(async(resolve,reject)=>{
+      try {
         const response=await fetch('/auth/signup',{
             method: 'POST',
             headers:{
@@ -7,8 +8,18 @@ export function createUser(userData:object){
             },
             body: JSON.stringify(userData)
         })
-        const data = await response.json();
-        resolve({data});
+        
+        if (response.ok) {
+          const data = await response.json();
+          resolve({ data });
+        } else {
+          const data = await response.json();
+   
+          reject( data.message );
+        }
+      }catch(error){
+        reject(error);
+      }
     })
 }
 
@@ -20,12 +31,11 @@ export function loginUser(loginInfo:object) {
           body: JSON.stringify(loginInfo),
           headers: { "content-type": "application/json" },
         });
-  
         if (response.ok) {
           const data = await response.json();
           resolve({ data });
         } else {
-          const error = await response.text();
+          const error = await response.statusText;
           reject( error );
         }
       } catch (error) {
@@ -42,7 +52,7 @@ export function checkAuth() {
           const data = await response.json();
           resolve({ data });
         } else {
-          const error = await response.text();
+          const error = await response.statusText;
           reject(error);
         }
       } catch (error) {

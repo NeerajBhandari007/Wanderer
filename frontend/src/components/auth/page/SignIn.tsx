@@ -20,7 +20,7 @@ export default function SignUp() {
     {user && <Navigate to="/" replace={true}></Navigate>}
     {status==='loading' && <LoaderOverlay></LoaderOverlay>}
     
-    <div className="flex min-h-full bg-center bg-back bg-cover w-full justify-center flex-1 px-6 py-12 md:px-1 md:py-4 lg:px-4 lg:py-4 h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-center bg-back bg-cover w-full justify-center flex-1 px-6 py-12 md:px-1 md:py-4 lg:px-4 lg:py-4  bg-gray-100">
       
       <div className="flex flex-col w-full md:w-1/2 lg:w-1/3 justify-between px-2 bg-gray-500 rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-20 border border-gray-100">
           <div className="flex  justify-center md:mt-2 md:justify-between items-center md:mx-4 lg:mx-2">

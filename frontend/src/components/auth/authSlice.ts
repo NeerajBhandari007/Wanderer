@@ -19,10 +19,17 @@ const initialState:AuthState = {
 
 export const createUserAsync = createAsyncThunk(
   "auth/createUser",
-  async (userInfo:object, thunkAPI) => {
+  async (userInfo:object,  { rejectWithValue }) => {
+    try{
     const response:any = await createUser(userInfo);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
+    } catch (error) {
+
+      // rejectWithValue is a utility function that we can return (or throw ) in 
+      // your action creator to return a rejected response with a defined payload and meta. 
+      return rejectWithValue(error);
+    }
   }
 );
 
@@ -67,7 +74,11 @@ export const loginUserAsync = createAsyncThunk(
 export const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    handleError(state) {
+      state.error=null
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createUserAsync.pending, (state) => {
@@ -121,4 +132,5 @@ export const selectLoggedInUser=(state:any)=>state.auth.loggedInUserToken;
 export const selectError = (state:any) => state.auth.error;
 export const selectStatus = (state:any) => state.auth.status;
 export const selectUserChecked = (state:any) => state.auth.userChecked;
+export const {handleError } = authSlice.actions;
 export default authSlice.reducer;

@@ -68,7 +68,7 @@ passport.use(
       const user = await prisma.users.findUnique({
         where: { email },
       });
-
+      console.log(user)
       if (!user) return done(null, false,{ message: "invalid credentials" });
 
       crypto.pbkdf2(
@@ -90,7 +90,7 @@ passport.use(
           }
         );
       } catch (err) {
-        done(err);
+        return done({ message: "Something Went Wrong" })
       }
     })
 );        

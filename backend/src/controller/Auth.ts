@@ -17,6 +17,7 @@ exports.createUser = async (req:Request, res:Response) => {
       32,
       'sha256',
       async function (err:Error, hashedPassword:String) {
+        try {
         const binaryData = Buffer.from(hashedPassword, 'binary'); // Example binary data
         const base64String = binaryData.toString('base64');
         const user = await prisma.users.create({
@@ -41,6 +42,16 @@ exports.createUser = async (req:Request, res:Response) => {
               .json({id:user.id, role:user.role,username:user.username,userImage:user.userImage,coverImage:user.coverImage});
           }
           })
+      }
+      catch(error){
+        console.log(error);
+          // Check if the error is related to unique constraint violation
+          if (error.code === 'P2002') {
+            return res.status(400).json({ message: 'Email already exists' });
+          } else {
+            return res.status(500).json({ message: 'Internal server error' });
+          }
+      }
       }
     );
   } catch (error) {

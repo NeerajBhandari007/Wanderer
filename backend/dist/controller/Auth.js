@@ -21,27 +21,39 @@ exports.createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const salt = crypto.randomBytes(16);
         crypto.pbkdf2(req.body.password, salt, 310000, 32, 'sha256', function (err, hashedPassword) {
             return __awaiter(this, void 0, void 0, function* () {
-                const binaryData = Buffer.from(hashedPassword, 'binary'); // Example binary data
-                const base64String = binaryData.toString('base64');
-                const user = yield prisma.users.create({
-                    data: Object.assign(Object.assign({}, req.body), { password: base64String, salt: salt.toString("base64") }),
-                });
-                console.log(hashedPassword);
-                req.login(sanitizeUser(user), (err) => {
-                    if (err) {
-                        throw err;
+                try {
+                    const binaryData = Buffer.from(hashedPassword, 'binary'); // Example binary data
+                    const base64String = binaryData.toString('base64');
+                    const user = yield prisma.users.create({
+                        data: Object.assign(Object.assign({}, req.body), { password: base64String, salt: salt.toString("base64") }),
+                    });
+                    console.log(hashedPassword);
+                    req.login(sanitizeUser(user), (err) => {
+                        if (err) {
+                            throw err;
+                        }
+                        else {
+                            const token = jwt.sign(sanitizeUser(user), process.env.JWT_SECRET_KEY);
+                            res
+                                .cookie('jwt', token, {
+                                expires: new Date(Date.now() + 3600000),
+                                httpOnly: true,
+                            })
+                                .status(201)
+                                .json({ id: user.id, role: user.role, username: user.username, userImage: user.userImage, coverImage: user.coverImage });
+                        }
+                    });
+                }
+                catch (error) {
+                    console.log(error);
+                    // Check if the error is related to unique constraint violation
+                    if (error.code === 'P2002') {
+                        return res.status(400).json({ message: 'Email already exists' });
                     }
                     else {
-                        const token = jwt.sign(sanitizeUser(user), process.env.JWT_SECRET_KEY);
-                        res
-                            .cookie('jwt', token, {
-                            expires: new Date(Date.now() + 3600000),
-                            httpOnly: true,
-                        })
-                            .status(201)
-                            .json({ id: user.id, role: user.role, username: user.username, userImage: user.userImage, coverImage: user.coverImage });
+                        return res.status(500).json({ message: 'Internal server error' });
                     }
-                });
+                }
             });
         });
     }

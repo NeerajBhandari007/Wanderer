@@ -12,7 +12,7 @@ import Feed from './components/feed/page/Feed';
 import Protected from './components/auth/page/Protected';
 import Comment from "./components/feed/page/Comment"
 import { useAppSelector ,useAppDispatch} from './mainStore/common'
-import { checkAuthAsync, selectLoggedInUser, selectUserChecked } from './components/auth/authSlice';
+import { checkAuthAsync, handleError, selectLoggedInUser, selectUserChecked } from './components/auth/authSlice';
 import { fetchLikedPostAsync, fetchLoggedInUserAsync, fetchRandomnUserAsync, fetchUserFreindsAsync } from './components/user/userSlice';
 import { fetchAllPostAsync } from './components/feed/feedSlice';
 import UserProfile from './components/user/page/UserProfile';
@@ -71,6 +71,7 @@ function App() {
       dispatch(fetchLikedPostAsync());
       dispatch(fetchUserFreindsAsync());
       dispatch(fetchLoggedInUserAsync());
+      dispatch(handleError())
     }
   }, [dispatch,user]);
   return (

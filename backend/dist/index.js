@@ -70,6 +70,7 @@ passport.use("local", new LocalStrategy({ usernameField: "email" }, (email, pass
         const user = yield prisma.users.findUnique({
             where: { email },
         });
+        console.log(user);
         if (!user)
             return done(null, false, { message: "invalid credentials" });
         crypto.pbkdf2(password, Buffer.from(user.salt, "base64"), 310000, 32, "sha256", function (err, hashedPassword) {
@@ -83,7 +84,7 @@ passport.use("local", new LocalStrategy({ usernameField: "email" }, (email, pass
         });
     }
     catch (err) {
-        done(err);
+        return done({ message: "Something Went Wrong" });
     }
 })));
 passport.use("jwt", new JwtStrategy({
