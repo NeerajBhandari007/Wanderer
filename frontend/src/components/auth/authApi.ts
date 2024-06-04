@@ -35,6 +35,9 @@ export function loginUser(loginInfo:object) {
           console.log(data);
           resolve({ data });
         } else {
+          console.log(response)
+          const data = await response.json();
+          console.log(data);
           const error = await response.statusText;
           console.log(error)
           reject(error);
