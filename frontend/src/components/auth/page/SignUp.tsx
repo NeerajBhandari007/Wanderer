@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { Link, Navigate } from "react-router-dom";
-import { createUserAsync, selectError, selectLoggedInUser, selectStatus } from "../authSlice";
+import { createUserAsync, handleError, selectError, selectLoggedInUser, selectStatus } from "../authSlice";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useAppSelector,useAppDispatch } from '../../../mainStore/common'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaImage } from "react-icons/fa";
 import logo from './Logo.png'; 
 import LoaderOverlay from "../../loader/Loader";
@@ -42,6 +42,9 @@ export default function SignUp() {
     }
     const dispatch=useAppDispatch();
     const user=useAppSelector(selectLoggedInUser)
+    useEffect(() => {
+      dispatch(handleError())
+    }, [])
   return (
     <>
     {user && <Navigate to="/" replace={true}></Navigate>}

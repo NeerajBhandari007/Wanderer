@@ -1,11 +1,12 @@
 import { useForm } from "react-hook-form";
 import { Link, Navigate } from "react-router-dom";
 import { useAppSelector,useAppDispatch } from '../../../mainStore/common'
-import { loginUserAsync, selectError, selectLoggedInUser, selectStatus } from "../authSlice";
+import { handleError, loginUserAsync, selectError, selectLoggedInUser, selectStatus } from "../authSlice";
 import logo from './Logo.png'; 
 import LoaderOverlay from "../../loader/Loader";
+import { useEffect } from "react";
 export default function SignUp() {
-  
+
   const status=useAppSelector(selectStatus)
   const error=useAppSelector(selectError);
     const {
@@ -15,6 +16,10 @@ export default function SignUp() {
       } = useForm();
     const dispatch=useAppDispatch();
     const user=useAppSelector(selectLoggedInUser)
+    useEffect(() => {
+      dispatch(handleError())
+    }, [])
+    
   return (
     <>
     {user && <Navigate to="/" replace={true}></Navigate>}
