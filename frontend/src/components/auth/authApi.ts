@@ -31,14 +31,13 @@ export function loginUser(loginInfo:object) {
           headers: { "content-type": "application/json" },
         });
           console.log(response)
-          const data = await response.json();
-          console.log(data);
+          
         if (response.ok) {
           const data = await response.json();
           console.log(data);
           resolve({ data });
         } else {
-          const error = await response.statusText;
+          const error = await response.text();
           console.log(error)
           reject(error);
         }
