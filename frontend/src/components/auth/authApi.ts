@@ -39,14 +39,23 @@ export function loginUser(loginInfo:object) {
         } else {
           const error = await response.text();
           console.log(error)
-          reject(error);
+          const err=parseErrorMessage(error)
+          console.log(err)
+          reject(err);
         }
       } catch (error) {
         reject(error);
       }
     });
 }
-
+function parseErrorMessage(errorText:any) {
+  // Try to match the "Internal Server Error" string
+  const match = errorText.match(/<pre>(.*?)<\/pre>/);
+  if (match && match[1]) {
+    return match[1]; // Return the text inside <pre> tags
+  }
+  return errorText; // Return the original text if no match is found
+}
 export function checkAuth() {
     return new Promise(async (resolve, reject) => {
       try {
