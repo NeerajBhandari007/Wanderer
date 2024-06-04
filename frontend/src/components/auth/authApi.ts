@@ -30,14 +30,14 @@ export function loginUser(loginInfo:object) {
           body: JSON.stringify(loginInfo),
           headers: { "content-type": "application/json" },
         });
+          console.log(response)
+          const data = await response.json();
+          console.log(data);
         if (response.ok) {
           const data = await response.json();
           console.log(data);
           resolve({ data });
         } else {
-          console.log(response)
-          const data = await response.json();
-          console.log(data);
           const error = await response.statusText;
           console.log(error)
           reject(error);
