@@ -69,6 +69,7 @@ passport.use(
         where: { email },
       });
       console.log(user)
+      console.log("hi")
       if (!user) return done(null, false,{ message: "invalid credentials" });
 
       crypto.pbkdf2(

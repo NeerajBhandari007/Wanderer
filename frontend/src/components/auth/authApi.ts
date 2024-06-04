@@ -14,7 +14,6 @@ export function createUser(userData:object){
           resolve({ data });
         } else {
           const data = await response.json();
-   
           reject( data.message );
         }
       }catch(error){
@@ -33,10 +32,12 @@ export function loginUser(loginInfo:object) {
         });
         if (response.ok) {
           const data = await response.json();
+          console.log(data);
           resolve({ data });
         } else {
           const error = await response.statusText;
-          reject( error );
+          console.log(error)
+          reject(error);
         }
       } catch (error) {
         reject(error);
